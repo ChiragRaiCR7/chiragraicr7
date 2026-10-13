@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Portfolio: Astro + Rust + SQLite",
+    "output": "architecture.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "visitor",
+      "type": "external",
+      "label": "Visitor",
+      "sublabel": "browser",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        130,
+        60
+      ]
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "portfolio-server",
+      "sublabel": "Rust \u00b7 axum",
+      "pos": [
+        300,
+        258
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "tag": "CSP + rate limit"
+    },
+    {
+      "id": "sqlite",
+      "type": "database",
+      "label": "SQLite",
+      "sublabel": "FTS5 index + inbox",
+      "pos": [
+        580,
+        258
+      ],
+      "size": [
+        160,
+        64
+      ]
+    },
+    {
+      "id": "site",
+      "type": "frontend",
+      "label": "Astro build",
+      "sublabel": "web/dist",
+      "pos": [
+        300,
+        90
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "content",
+      "type": "external",
+      "label": "resume.json",
+      "sublabel": "single source",
+      "pos": [
+        580,
+        90
+      ],
+      "size": [
+        160,
+        60
+      ]
+    },
+    {
+      "id": "pages",
+      "type": "cloud",
+      "label": "GitHub Pages",
+      "sublabel": "static only",
+      "pos": [
+        40,
+        440
+      ],
+      "size": [
+        130,
+        60
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "visit",
+      "from": "visitor",
+      "to": "server",
+      "label": "HTTPS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "query",
+      "from": "server",
+      "to": "sqlite",
+      "label": "MATCH / INSERT"
+    },
+    {
+      "id": "serve",
+      "from": "server",
+      "to": "site",
+      "label": "ServeDir",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "build",
+      "from": "content",
+      "to": "site",
+      "label": "build-time import"
+    },
+    {
+      "id": "reindex",
+      "from": "content",
+      "to": "sqlite",
+      "label": "reindex on boot",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        660,
+        204
+      ]
+    },
+    {
+      "id": "fallback",
+      "from": "visitor",
+      "to": "pages",
+      "label": "no API",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        105,
+        380
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Frontend",
+      "items": [
+        "Astro static HTML, zero framework JS",
+        "Search + contact switch on after /api/health"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Backend",
+      "items": [
+        "axum JSON API: health, search, contact",
+        "SQLite FTS5 with bm25 ranking and cited snippets"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Security",
+      "items": [
+        "Strict CSP, no inline code",
+        "Body limit, per-IP limit, honeypot, CHECK constraints"
+      ]
+    }
+  ]
+}

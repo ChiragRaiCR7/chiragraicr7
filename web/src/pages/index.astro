@@ -1,0 +1,269 @@
+---
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource/instrument-serif/400-italic.css';
+import '@fontsource-variable/hanken-grotesk';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import resume from '../../../content/resume.json';
+
+const { profile, experience, projects, skills, education, certifications } = resume;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const title = `${profile.name} — Generative AI Engineer`;
+const description =
+  'Generative AI engineer building production RAG systems, LangGraph agents, and the Python backends under them.';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="canonical" href={new URL(base, Astro.site)} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(`${base}portrait-880.webp`, Astro.site)} />
+    <meta name="api-base" content={base} />
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header class="masthead wrap">
+      <a class="wordmark" href={base}>Chirag Rai</a>
+      <nav aria-label="Sections">
+        <a href="#work">Work</a>
+        <a href="#experience">Experience</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap" id="about" aria-labelledby="hero-title">
+        <div class="hero-text">
+          <h1 id="hero-title">
+            I build LLM systems that stay <em>grounded</em> in production.
+          </h1>
+          <p class="lede">
+            Generative AI engineer at Tata Consultancy Services. I ship retrieval-augmented generation,
+            LangGraph agents, and the FastAPI services underneath them, including a RAG system that cut
+            hallucination rates by 25%.
+          </p>
+          <p class="meta-line">
+            <span>{profile.location}</span>
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#contact">Start a conversation <Icon name="arrow" /></a>
+            <a class="button" href={profile.github} rel="noopener">
+              <Icon name="github" /> GitHub
+            </a>
+            <a class="button" href={profile.linkedin} rel="noopener">
+              <Icon name="linkedin" /> LinkedIn
+            </a>
+          </div>
+        </div>
+        <figure class="portrait">
+          <img
+            src={`${base}portrait-440.webp`}
+            srcset={`${base}portrait-440.webp 440w, ${base}portrait-880.webp 880w`}
+            sizes="(min-width: 56rem) 22rem, 70vw"
+            width="440"
+            height="533"
+            alt="Chirag Rai, seated at a café table, looking off to the side"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </figure>
+      </section>
+
+      <section class="ask wrap" aria-labelledby="ask-title" data-needs-api hidden>
+        <div class="ask-panel">
+          <h2 id="ask-title" class="ask-title">Ask this résumé</h2>
+          <p class="ask-hint" id="ask-hint">
+            Full-text search over every line below, served by a Rust API from SQLite. Each answer links
+            to its source.
+          </p>
+          <form class="ask-form" role="search" action="#" data-ask-form>
+            <label class="visually-hidden" for="ask-input">Search the résumé</label>
+            <Icon name="search" />
+            <input
+              id="ask-input"
+              name="q"
+              type="search"
+              maxlength="200"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Try “MCP”, “hallucination”, or “Oracle”"
+              aria-describedby="ask-hint"
+              aria-controls="ask-results"
+            />
+          </form>
+          <p class="ask-status" role="status" aria-live="polite" data-ask-status></p>
+          <ol class="ask-results" id="ask-results" data-ask-results></ol>
+        </div>
+      </section>
+
+      <section class="section wrap" id="work" aria-labelledby="work-title">
+        <h2 id="work-title">Selected work</h2>
+        <div class="section-body">
+          {
+            projects.map((p) => (
+              <article class="project" id={`project-${p.slug}`}>
+                <header>
+                  <h3>{p.name}</h3>
+                  <p class="tagline">{p.tagline}</p>
+                </header>
+                <div>
+                  <p>{p.description}</p>
+                  <ul class="stack" aria-label={`${p.name} stack`}>
+                    {p.stack.map((s) => (
+                      <li>{s}</li>
+                    ))}
+                  </ul>
+                </div>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section wrap" id="experience" aria-labelledby="experience-title">
+        <h2 id="experience-title">Experience</h2>
+        <div class="section-body">
+          {
+            experience.map((job) => (
+              <article class="job">
+                <header>
+                  <h3>{job.role}</h3>
+                  <p class="org">{job.company}</p>
+                  <p class="period">{job.period}</p>
+                </header>
+                <ul class="points">
+                  {job.points.map((pt) => (
+                    <li>{pt}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section wrap" id="skills" aria-labelledby="skills-title">
+        <h2 id="skills-title">Toolkit</h2>
+        <dl class="section-body skills">
+          {
+            skills.map((g) => (
+              <div class="skill-group">
+                <dt>{g.group}</dt>
+                <dd>{g.items.join(' · ')}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+
+      <section class="section wrap" id="education" aria-labelledby="education-title">
+        <h2 id="education-title">Education</h2>
+        <div class="section-body credentials">
+          {
+            education.map((e) => (
+              <div>
+                <h3>{e.degree}</h3>
+                <p>
+                  {e.school} <span class="sep">·</span> {e.detail}
+                </p>
+                <p class="period">{e.period}</p>
+              </div>
+            ))
+          }
+          {
+            certifications.map((c) => (
+              <div>
+                <h3>{c.name}</h3>
+                <p>{c.issuer}</p>
+                <p class="period">Earned {c.year}</p>
+              </div>
+            ))
+          }
+        </div>
+      </section>
+
+      <section class="section wrap contact" id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title">Let’s build something that ships.</h2>
+        <div class="section-body">
+          <p class="contact-lede">
+            Open to Generative AI and agentic engineering roles, in India or abroad. The fastest way to
+            reach me is email.
+          </p>
+          <ul class="contact-links">
+            <li>
+              <a href={`mailto:${profile.email}`}><Icon name="mail" />{profile.email}</a>
+            </li>
+            <li>
+              <a href={profile.linkedin} rel="noopener"><Icon name="linkedin" />linkedin.com/in/chiragr7</a>
+            </li>
+            <li>
+              <a href={profile.github} rel="noopener"><Icon name="github" />github.com/ChiragRaiCR7</a>
+            </li>
+          </ul>
+
+          <form class="contact-form" data-contact-form data-needs-api hidden novalidate>
+            <p class="form-intro">Or leave a note here. It lands in my inbox database.</p>
+            <div class="field">
+              <label for="c-name">Name</label>
+              <input id="c-name" name="name" autocomplete="name" required maxlength="100" aria-errormessage="c-name-err" />
+              <p class="error-msg" id="c-name-err">Enter your name.</p>
+            </div>
+            <div class="field">
+              <label for="c-email">Work email</label>
+              <input
+                id="c-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                maxlength="254"
+                aria-errormessage="c-email-err"
+              />
+              <p class="error-msg" id="c-email-err">Enter an email address like name@company.com.</p>
+            </div>
+            <div class="field">
+              <label for="c-message">Message</label>
+              <textarea
+                id="c-message"
+                name="message"
+                rows="5"
+                required
+                minlength="10"
+                maxlength="5000"
+                aria-errormessage="c-message-err"></textarea>
+              <p class="error-msg" id="c-message-err">Write at least 10 characters.</p>
+            </div>
+            <div class="trap" aria-hidden="true">
+              <label for="c-website">Leave this empty</label>
+              <input id="c-website" name="website" tabindex="-1" autocomplete="off" />
+            </div>
+            <div class="form-footer">
+              <button class="button primary" type="submit">Send message <Icon name="arrow" /></button>
+              <p class="form-status" role="status" aria-live="polite" data-contact-status></p>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="colophon wrap">
+      <p>© {new Date().getFullYear()} {profile.name}</p>
+      <p>Built with Astro, a Rust API, and SQLite.</p>
+    </footer>
+  </body>
+</html>

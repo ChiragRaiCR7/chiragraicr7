@@ -1,0 +1,32 @@
+---
+// One stroke weight, one grid (24px), authored paths: no icon font, no emoji.
+interface Props {
+  name: 'mail' | 'github' | 'linkedin' | 'arrow' | 'search';
+}
+const { name } = Astro.props;
+const paths: Record<Props['name'], string[]> = {
+  mail: ['M3.5 6.5h17v11h-17z', 'm3.5 7 8.5 6.5L20.5 7'],
+  github: [
+    'M9 19c-4.5 1.4-4.5-2.5-6.5-3m13 5v-3.5a3 3 0 0 0-.9-2.4c2.9-.3 6-1.4 6-6.4a5 5 0 0 0-1.4-3.5 4.6 4.6 0 0 0-.1-3.5s-1.1-.3-3.6 1.4a12.4 12.4 0 0 0-6.5 0C6.5 1.4 5.4 1.7 5.4 1.7a4.6 4.6 0 0 0-.1 3.5A5 5 0 0 0 4 8.7c0 5 3.1 6.1 6 6.4a3 3 0 0 0-.9 2.4V21',
+  ],
+  linkedin: ['M4.5 9.5v10', 'M4.5 5v.01', 'M9.5 19.5v-10', 'M9.5 13.5a4 4 0 0 1 8 0v6'],
+  arrow: ['M5 12h14', 'm13 6 6 6-6 6'],
+  search: ['M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13z', 'm15.5 15.5 4.5 4.5'],
+};
+---
+
+<svg
+  class="icon"
+  viewBox="0 0 24 24"
+  width="20"
+  height="20"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {paths[name].map((d) => <path d={d} />)}
+</svg>

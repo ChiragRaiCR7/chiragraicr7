@@ -1,10 +1,12 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Builds the Astro site and deploys it to GitHub Pages as a static site.
+# Pages has no backend, so the API-powered search and contact form stay hidden
+# there; the full stack runs from the Docker image (see README).
+name: Deploy static site to Pages
 
 on:
   push:
-    branches: ["main"]  # Runs on push to the main branch
-  workflow_dispatch:  # Allows manual trigger
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,26 +18,33 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build
+        working-directory: web
+        env:
+          BASE_PATH: /chiragraicr7/
+        run: |
+          npm ci
+          npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Debug Repository Structure
-        run: ls -R  # Helps verify the correct deployment path
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'  # Adjust based on the actual file structure
-
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
