@@ -23,9 +23,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [javascript-typescript, python, java, cpp]  # Expanded for more languages
-        build-mode: [none, manual]  # Supports both "none" & "manual" builds
-
+        # Languages actually present in the repository; none need a build step.
+        language: [javascript-typescript, rust, actions]
+        build-mode: [none]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -36,21 +36,6 @@ jobs:
         languages: ${{ matrix.language }}
         build-mode: ${{ matrix.build-mode }}
         queries: security-extended,security-and-quality  # Enabling deeper security analysis
-
-    - name: Build Code (If Required)
-      if: matrix.build-mode == 'manual'
-      shell: bash
-      run: |
-        echo "🛠️ Running manual build..."
-        # Example build commands (Modify based on your project)
-        if [ -f "Makefile" ]; then
-          make build
-        elif [ -f "package.json" ]; then
-          npm install && npm run build
-        else
-          echo "⚠️ No recognized build process found!"
-          exit 1
-        fi
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3

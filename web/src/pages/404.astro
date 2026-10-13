@@ -1,0 +1,35 @@
+---
+import '@fontsource/instrument-serif/400.css';
+import '@fontsource-variable/hanken-grotesk';
+import '../styles/global.css';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Page not found — Chirag Rai</title>
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+  </head>
+  <body>
+    <main class="wrap not-found">
+      <h1>This page doesn’t exist.</h1>
+      <p class="lede">The portfolio is a single page now. Everything lives there.</p>
+      <p class="actions"><a class="button primary" href={base}>Go to the portfolio</a></p>
+    </main>
+  </body>
+</html>
+
+<style>
+  .not-found {
+    padding-block: clamp(4rem, 14vw, 9rem);
+  }
+  .not-found h1 {
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    max-width: 14ch;
+  }
+</style>

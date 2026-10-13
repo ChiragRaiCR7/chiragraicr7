@@ -1,0 +1,155 @@
+{
+  "profile": {
+    "name": "Chirag Rai",
+    "headline": "Generative AI Engineer · Agentic AI · Python Backend",
+    "location": "India · Open to relocation",
+    "email": "chiragraicr7@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/chiragr7",
+    "github": "https://github.com/ChiragRaiCR7",
+    "summary": "Generative AI Engineer with 1+ year of production experience building large language model (LLM) applications, Retrieval-Augmented Generation (RAG) systems, agentic workflows, and Python backend services. Hands-on with LangGraph, LangChain, FastAPI, Azure OpenAI, vector retrieval, tool calling, streaming, and LangSmith observability."
+  },
+  "experience": [
+    {
+      "role": "System Engineer",
+      "company": "Tata Consultancy Services (TCS)",
+      "period": "Apr 2025 – Present",
+      "points": [
+        "Designed and deployed a production RAG system using LangChain and Azure OpenAI, reducing hallucination rates by 25%.",
+        "Built an AI agent and chatbot with LangGraph multi-turn reasoning, vector retrieval, FastAPI, and live Server-Sent Events (SSE) streaming.",
+        "Developed ingestion workflows for CSV, Excel, databases, and enterprise documents, transforming heterogeneous data into indexed knowledge for retrieval.",
+        "Optimized prompts, model selection, and token utilization; integrated LangSmith tracing for LLM application observability."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "slug": "autoresolve",
+      "name": "AutoResolve",
+      "tagline": "Visual AI agent studio and workflow automation",
+      "description": "Built a multi-agent LangGraph workflow studio with conditional routing, retries, and live SSE streaming. Implemented MCP integrations, a credential vault, partitioned PostgreSQL multi-tenancy, and LangSmith tracing.",
+      "stack": [
+        "LangGraph",
+        "MCP",
+        "SSE",
+        "PostgreSQL",
+        "LangSmith"
+      ]
+    },
+    {
+      "slug": "autonomous-dba-agent",
+      "name": "Autonomous DBA Agent",
+      "tagline": "Oracle database remediation",
+      "description": "Built an email-triggered Python agent to inspect Oracle blocking sessions and execute guarded remediation, with structured run IDs, per-step logs, and automated incident reports.",
+      "stack": [
+        "Python",
+        "Oracle Database",
+        "Agent guardrails",
+        "Incident reporting"
+      ]
+    },
+    {
+      "slug": "ret-v4",
+      "name": "RET v4",
+      "tagline": "XML intelligence and AI comparison",
+      "description": "Built an asynchronous FastAPI platform for XML/ZIP analysis, CSV/XLSX conversion, Azure OpenAI retrieval, business-graph visualization, and comparison workflows with JWT authentication and database migrations.",
+      "stack": [
+        "FastAPI",
+        "Azure OpenAI",
+        "JWT",
+        "Alembic",
+        "Async Python"
+      ]
+    },
+    {
+      "slug": "cfihos-rag",
+      "name": "CFIHOS RAG Chatbot",
+      "tagline": "Industrial knowledge assistant",
+      "description": "Automated document collection and chunking with Playwright; built citation-aware answers using LangChain, ChromaDB hybrid retrieval, and FastAPI.",
+      "stack": [
+        "LangChain",
+        "ChromaDB",
+        "Hybrid retrieval",
+        "Playwright",
+        "FastAPI"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "group": "AI & agents",
+      "items": [
+        "LangGraph",
+        "LangChain",
+        "Microsoft AutoGen",
+        "Multi-agent systems",
+        "Agent orchestration",
+        "Model Context Protocol (MCP)",
+        "Tool calling",
+        "Prompt engineering",
+        "Agent guardrails"
+      ]
+    },
+    {
+      "group": "RAG & evaluation",
+      "items": [
+        "Embeddings",
+        "Semantic search",
+        "Hybrid search",
+        "Metadata filtering",
+        "Document chunking",
+        "Citation-aware retrieval",
+        "LLM evaluation",
+        "Agent evaluation",
+        "LangSmith"
+      ]
+    },
+    {
+      "group": "Vector databases",
+      "items": [
+        "Qdrant (production)",
+        "ChromaDB (prototyping)"
+      ]
+    },
+    {
+      "group": "Backend & data",
+      "items": [
+        "Python",
+        "Async programming",
+        "FastAPI",
+        "REST APIs",
+        "PostgreSQL",
+        "Oracle Database",
+        "SQLAlchemy",
+        "Alembic",
+        "Pydantic",
+        "JWT authentication"
+      ]
+    },
+    {
+      "group": "Platforms & tools",
+      "items": [
+        "Azure OpenAI Service",
+        "Oracle Generative AI",
+        "AWS",
+        "Docker",
+        "OpenAI Codex",
+        "Claude Code"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "B.Tech, Computer Science and Business Systems",
+      "school": "Meghnad Saha Institute of Technology",
+      "period": "2020 – 2024",
+      "detail": "CGPA 8.81/10"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Cloud Practitioner (CLF-C02)",
+      "issuer": "Amazon Web Services",
+      "year": "2023"
+    }
+  ]
+}
