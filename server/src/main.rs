@@ -22,6 +22,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_env_filter(
             EnvFilter::try_from_default_env().unwrap_or_else(|_| "info,tower_http=info".into()),
         )
+        .with_ansi(std::io::IsTerminal::is_terminal(&std::io::stdout()))
         .init();
 
     let db_path = env_or("DATABASE_PATH", "data/portfolio.db");
@@ -29,9 +30,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .parent()
         .filter(|p| !p.as_os_str().is_empty())
     {
-        std::fs::create_dir_all(parent)?;
+        std::fs::create_dir_all(parent)
+            .map_err(|e| format!("cannot create {}: {e}", parent.display()))?;
     }
-    let mut conn = db::open(&db_path)?;
+    let mut conn =
+        db::open(&db_path).map_err(|e| format!("cannot open database at {db_path}: {e}"))?;
 
     if std::env::args().nth(1).as_deref() == Some("messages") {
         for message in db::list_messages(&conn)? {

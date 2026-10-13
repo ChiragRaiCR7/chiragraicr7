@@ -30,7 +30,7 @@ explicit migration (add `PRAGMA user_version` bookkeeping when that first happen
 |---|---|---|---|
 | GET | `/api/health` | `200 {"status":"ok"}` | `500` if SQLite is unreachable |
 | GET | `/api/search?q=` | `200 {"query","hits":[{anchor,section,title,snippet}]}` | `422` query > 200 chars |
-| POST | `/api/contact` | `201 {"ok":true}` | `422 {"error","field"}`, `413` body > 16 KiB, `415` not JSON, `429` rate limited |
+| POST | `/api/contact` | `201 {"ok":true}` | `422 {"error","field"}` invalid field, `400`/`415`/`422` unparseable body, `413` body > 16 KiB, `429` rate limited; all errors are `{"error": ...}` JSON |
 
 ## Security
 

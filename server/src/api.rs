@@ -6,6 +6,7 @@ use std::path::Path;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 
+use axum::extract::rejection::JsonRejection;
 use axum::extract::{ConnectInfo, Query, State};
 use axum::http::{HeaderName, HeaderValue, StatusCode, header};
 use axum::response::{IntoResponse, Response};
@@ -207,8 +208,18 @@ fn validate(form: &ContactForm) -> Result<(), (&'static str, &'static str)> {
 async fn contact(
     State(state): State<AppState>,
     ConnectInfo(peer): ConnectInfo<SocketAddr>,
-    Json(form): Json<ContactForm>,
+    body: Result<Json<ContactForm>, JsonRejection>,
 ) -> Response {
+    // Keep the JSON error contract even for bodies axum cannot parse.
+    let Json(form) = match body {
+        Ok(json) => json,
+        Err(rejection) => {
+            return error(
+                rejection.status(),
+                "Send name, email and message as a JSON object.",
+            );
+        }
+    };
     if let Err((field, message)) = validate(&form) {
         return (
             StatusCode::UNPROCESSABLE_ENTITY,
@@ -383,6 +394,21 @@ mod tests {
             StatusCode::TOO_MANY_REQUESTS
         );
         assert_eq!(stored(&state), CONTACT_LIMIT);
+    }
+
+    #[tokio::test]
+    async fn contact_malformed_json_keeps_json_errors() {
+        let (router, _) = app();
+        let req = Request::post("/api/contact")
+            .header(header::CONTENT_TYPE, "application/json")
+            .body(Body::from("{bad"))
+            .unwrap();
+        let (status, body, _) = send(&router, req).await;
+        assert_eq!(status, StatusCode::BAD_REQUEST);
+        assert!(body["error"].is_string());
+        let (status, body, _) = send(&router, post_json(json!({"name": "Ana"}))).await;
+        assert_eq!(status, StatusCode::UNPROCESSABLE_ENTITY);
+        assert!(body["error"].is_string());
     }
 
     #[tokio::test]
