@@ -116,19 +116,29 @@ fn error(status: StatusCode, message: &str) -> Response {
     (status, Json(json!({ "error": message }))).into_response()
 }
 
-fn internal(err: impl std::fmt::Display) -> Response {
+/// A failure already logged server-side; renders as a generic 500 so no
+/// internal detail reaches the client.
+struct InternalError;
+
+impl IntoResponse for InternalError {
+    fn into_response(self) -> Response {
+        error(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            "Something went wrong on our side. Please try again.",
+        )
+    }
+}
+
+fn internal(err: impl std::fmt::Display) -> InternalError {
     tracing::error!(%err, "request failed");
-    error(
-        StatusCode::INTERNAL_SERVER_ERROR,
-        "Something went wrong on our side. Please try again.",
-    )
+    InternalError
 }
 
 /// Runs a closure against the database off the async executor.
 async fn with_db<T: Send + 'static>(
     state: &AppState,
     f: impl FnOnce(&Connection) -> rusqlite::Result<T> + Send + 'static,
-) -> Result<T, Response> {
+) -> Result<T, InternalError> {
     let db = state.db.clone();
     tokio::task::spawn_blocking(move || {
         let conn = db.lock().unwrap_or_else(|poisoned| poisoned.into_inner());
@@ -146,7 +156,7 @@ async fn health(State(state): State<AppState>) -> Response {
     .await
     {
         Ok(_) => Json(json!({ "status": "ok" })).into_response(),
-        Err(resp) => resp,
+        Err(err) => err.into_response(),
     }
 }
 
@@ -166,7 +176,7 @@ async fn search(State(state): State<AppState>, Query(params): Query<SearchParams
     let q = params.q.clone();
     match with_db(&state, move |c| db::search(c, &q)).await {
         Ok(hits) => Json(json!({ "query": params.q, "hits": hits })).into_response(),
-        Err(resp) => resp,
+        Err(err) => err.into_response(),
     }
 }
 
@@ -253,7 +263,7 @@ async fn contact(
             tracing::info!(message_id = id, "contact message stored");
             (StatusCode::CREATED, Json(json!({ "ok": true }))).into_response()
         }
-        Err(resp) => resp,
+        Err(err) => err.into_response(),
     }
 }
 
